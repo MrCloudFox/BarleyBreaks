@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using System.IO;
 
 namespace BarleyBreak
 {
     class Game
     {
         
-        private double side;
+        public readonly double side;
         private int[,] matrix;
-        private Dictionary<int, string> coordinate = new Dictionary<int, string>();
+        private Dictionary<int, Tuple<int,int>> coordinate = new Dictionary<int, Tuple<int, int>>();
         private int zeroX, zeroY;
         private int valX, valY;
 
@@ -21,7 +22,6 @@ namespace BarleyBreak
 
             double side = Math.Sqrt(value.Length);
             bool haveZero = false;
-            String coordStr;
 
             for(int i = 0; i < value.Length; i++)
             {
@@ -32,11 +32,10 @@ namespace BarleyBreak
                 }
             }
 
-            
 
             if (side % 1 != 0 || !haveZero)
             {
-                throw new Exception("Incorrect number of values or not available 0.");
+                throw new ArgumentException("Incorrect number of values or not available 0.");
             }
             else
             {
@@ -50,19 +49,34 @@ namespace BarleyBreak
                     for (int j = 0; j < side; j++)
                     {
                         matrix[i, j] = value[position];
-                        coordStr = i + " " + j;
                         if(value[position] == 0)
                         {
                             zeroX = i;
                             zeroY = j;
                         }
-                        if (coordinate.ContainsKey(value[position]))
-                            throw new Exception("Value is repeated.");
-                        else coordinate.Add(value[position], coordStr);
+                        /*if (coordinate.ContainsKey(value[position]))
+                            throw new ArgumentException("Value is repeated.");
+                        else*/ coordinate.Add(value[position], Tuple.Create<int, int>(i, j));
                         position++;
                     }
                 }
             }
+
+            int val = 0;
+            bool have = false;
+
+                for (int i = 0; i < value.Length; i++)
+                {
+                    for(int j = 0; j < value.Length; j++)
+                    {
+                    if (value[j] == val)
+                        have = true;
+                    }
+
+                if (!have) throw new ArgumentException("A bunch of values are not corrected.");
+                have = false;
+                val++;
+                }
         }
 
 
@@ -73,7 +87,7 @@ namespace BarleyBreak
         }
 
 
-        public String GetLocation(int value)
+        public Tuple<int, int> GetLocation(int value)
         {
             return coordinate[value];
 
@@ -86,60 +100,41 @@ namespace BarleyBreak
             int x2, y2;
             int temp;
 
-            String[] coord1 = GetLocation(a).Split(new char[] { ' ' },
-                StringSplitOptions.RemoveEmptyEntries);
-            x1 = Int32.Parse(coord1[0]);
-            y1 = Int32.Parse(coord1[1]);
+            x1 = GetLocation(a).Item1;
+            y1 = GetLocation(a).Item2;
 
-            String[] coord2 = GetLocation(b).Split(new char[] { ' ' },
-                StringSplitOptions.RemoveEmptyEntries);
-            x2 = Int32.Parse(coord2[0]);
-            y2 = Int32.Parse(coord2[1]);
+            x2 = GetLocation(b).Item1;
+            y2 = GetLocation(b).Item2;
 
             temp = matrix[x1, y1];
             matrix[x1, y1] = matrix[x2, y2];
             matrix[x2, y2] = temp;
 
-            coordinate.Remove(matrix[x1, y1]);
-            coordinate.Remove(matrix[x2, y2]);
-            coordinate.Add(matrix[x1, y1], (x1 + " " + y1));
-            coordinate.Add(matrix[x2, y2], (x2 + " " + y2));
+            Tuple<int, int> tupleTemp = new Tuple<int, int>(GetLocation(matrix[x1, y1]).Item1, GetLocation(matrix[x1, y1]).Item2);
+            coordinate[matrix[x1, y1]] = coordinate[matrix[x2, y2]];
+            coordinate[matrix[x2, y2]] = tupleTemp;
 
             valX = x2;
             valY = y2;
             zeroX = x1;
-            zeroY = y2;
+            zeroY = y1;
 
         }
 
 
         public void Shift(int value)
         {
-            String[] coord1 = GetLocation(value).Split(new char[] { ' ' },
-                StringSplitOptions.RemoveEmptyEntries);
-            valX = Int32.Parse(coord1[0]);
-            valY = Int32.Parse(coord1[1]);
-               
-            if(Math.Abs(valX - zeroX) + Math.Abs(valY - zeroY) == 1)
+            valX = GetLocation(value).Item1;
+            valY = GetLocation(value).Item2;
+
+            if (Math.Abs(valX - zeroX) == 1 && zeroY - valY == 0 ||
+                Math.Abs(valY - zeroY) == 1 && zeroX - valX == 0)
             {
                 swap(value, 0);
             }
             else
             {
-                throw new Exception("Enter incorrect number.");
-            }
-        }
-
-
-        public void OutPutMatrix()
-        {
-            for(int i = 0; i < side; i++)
-            {
-                for(int j = 0; j < side; j++)
-                {
-                    Console.Write(String.Format("{0,2} ", matrix[i, j]));
-                }
-                Console.WriteLine();
+                throw new ArgumentException("Enter incorrect number.");
             }
         }
 
@@ -161,9 +156,23 @@ namespace BarleyBreak
             }
 
             if (fullSet == Math.Pow(side, 2) - 2)
-                Console.WriteLine("You WIN !");
+                Console.WriteLine("You WIN!");
         }
-         
+
+
+        public static Game FromCSV(string file)
+        {
+            string[] csv = File.ReadAllLines(file);
+            List<int> list = new List<int>();
+            for (int i = 0; i < csv.Count(); i++)
+            {
+                for (int j = 0; j < csv[i].Split(';').Count(); j++)
+                {
+                    list.Add(Convert.ToInt32(csv[i].Split(';')[j]));
+                }
+            }
+            return new Game(list.ToArray<int>());
+        }
 
     }
 }
