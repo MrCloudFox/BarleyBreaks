@@ -13,13 +13,14 @@ namespace BarleyBreak
         private double side;
         private int[,] matrix;
         private Dictionary<int, string> coordinate = new Dictionary<int, string>();
+        private int zeroX, zeroY;
+        private int valX, valY;
 
         public Game(params int[] value)
         {
 
             double side = Math.Sqrt(value.Length);
             bool haveZero = false;
-            bool repeat;
             String coordStr;
 
             for(int i = 0; i < value.Length; i++)
@@ -50,6 +51,11 @@ namespace BarleyBreak
                     {
                         matrix[i, j] = value[position];
                         coordStr = i + " " + j;
+                        if(value[position] == 0)
+                        {
+                            zeroX = i;
+                            zeroY = j;
+                        }
                         if (coordinate.ContainsKey(value[position]))
                             throw new Exception("Value is repeated.");
                         else coordinate.Add(value[position], coordStr);
@@ -57,8 +63,6 @@ namespace BarleyBreak
                     }
                 }
             }
-
-
         }
 
 
@@ -101,90 +105,29 @@ namespace BarleyBreak
             coordinate.Add(matrix[x1, y1], (x1 + " " + y1));
             coordinate.Add(matrix[x2, y2], (x2 + " " + y2));
 
+            valX = x2;
+            valY = y2;
+            zeroX = x1;
+            zeroY = y2;
+
         }
 
 
         public void Shift(int value)
         {
-            int x, y;
-            String[] coord = GetLocation(value).Split(new char[] { ' ' },
+            String[] coord1 = GetLocation(value).Split(new char[] { ' ' },
                 StringSplitOptions.RemoveEmptyEntries);
-            x = Int32.Parse(coord[0]);
-            y = Int32.Parse(coord[1]);
-
-            if(x < (side - 1) && y < (side - 1) && x != 0 && y != 0)
+            valX = Int32.Parse(coord1[0]);
+            valY = Int32.Parse(coord1[1]);
+               
+            if(Math.Abs(valX - zeroX) + Math.Abs(valY - zeroY) == 1)
             {
-                if (this[x + 1, y] == 0 || this[x - 1, y] == 0 ||
-                    this[x, y + 1] == 0 || this[x, y - 1] == 0) swap(value, 0);
-                else
-                    throw new Exception("Selected incorrect value.");
-            }
-            else
-            if(x == (side - 1) && y < (side - 1) && y > 0)
-            {
-                if (this[x, y + 1] == 0 || this[x - 1, y] == 0 ||
-                    this[x, y - 1] == 0) swap(value, 0);
-                else
-                    throw new Exception("Selected incorrect value.");
-            }
-            else
-            if(x < (side - 1) && x > 0 && y == (side - 1))
-            {
-                if (this[x, y - 1] == 0 || this[x + 1, y] == 0 ||
-                    this[x - 1, y] == 0)
                 swap(value, 0);
-                else
-                    throw new Exception("Selected incorrect value.");
             }
             else
-            if(x == 0 && y > 0 && y < (side - 1))
             {
-                if (this[x, y + 1] == 0 || this[x + 1, y] == 0 ||
-                    this[x, y - 1] == 0) swap(value, 0);
-                else
-                    throw new Exception("Selected incorrect value.");
+                throw new Exception("Enter incorrect number.");
             }
-            else
-            if(x > 0 && x < (side - 1) && y == 0)
-            {
-                if (this[x + 1, y] == 0 || this[x - 1, y] == 0 ||
-                    this[x, y + 1] == 0) swap(value, 0);
-                else
-                    throw new Exception("Selected incorrect value.");
-            }
-            else
-            if(x == 0 && y == 0)
-            {
-                if (this[x, y + 1] == 0 || this[x + 1, y] == 0)
-                    swap(value, 0);
-                else
-                    throw new Exception("Selected incorrect value.");
-            }
-            else
-            if(x == (side - 1) && y == (side - 1))
-            {
-                if (this[x, y - 1] == 0 || this[x - 1, y] == 0)
-                    swap(value, 0);
-                else
-                    throw new Exception("Selected incorrect value.");
-            }
-            else
-            if(x == 0 && y == (side - 1))
-            {
-                if (this[x + 1, y] == 0 || this[x, y - 1] == 0)
-                    swap(value, 0);
-                else
-                    throw new Exception("Selected incorrect value.");
-            }
-            else
-            if(x == (side - 1) && y == 0)
-            {
-                if (this[x, y + 1] == 0 || this[x - 1, y] == 0)
-                    swap(value, 0);
-                else
-                    throw new Exception("Selected incorrect value.");
-            }
-
         }
 
 
@@ -194,7 +137,7 @@ namespace BarleyBreak
             {
                 for(int j = 0; j < side; j++)
                 {
-                    Console.Write(matrix[i, j] + " ");
+                    Console.Write(String.Format("{0,2} ", matrix[i, j]));
                 }
                 Console.WriteLine();
             }

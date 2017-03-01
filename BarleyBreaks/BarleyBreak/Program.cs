@@ -17,7 +17,7 @@ namespace BarleyBreak
             var bb = new Game(values);
             int enter;
             bool controlMenu = false;
-
+ 
             bb.OutPutMatrix();
             Console.WriteLine();
            
