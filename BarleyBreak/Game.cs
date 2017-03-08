@@ -11,15 +11,14 @@ namespace BarleyBreak
     class Game
     {
         
-        public readonly double side;
-        private int[,] matrix;
-        private Dictionary<int, Tuple<int,int>> coordinate = new Dictionary<int, Tuple<int, int>>();
-        private int zeroX, zeroY;
-        private int valX, valY;
+        protected double side;
+        protected int[,] matrix;
+        protected Dictionary<int, Tuple<int,int>> coordinate = new Dictionary<int, Tuple<int, int>>();
+        protected int zeroX, zeroY;
+        protected int valX, valY;
 
         public Game(params int[] value)
         {
-
             double side = Math.Sqrt(value.Length);
             bool haveZero = false;
 
@@ -79,6 +78,11 @@ namespace BarleyBreak
                 }
         }
 
+        public double Side
+        {
+            get { return side; }
+        }
+
 
         public int this[int i, int j]
         {
@@ -94,7 +98,7 @@ namespace BarleyBreak
         }
 
 
-        private void swap(int a, int b)
+        protected void swap(int a, int b)
         {
             int x1, y1;
             int x2, y2;
@@ -139,27 +143,6 @@ namespace BarleyBreak
         }
 
 
-        public void FullSetTest()
-        {
-            int value = 1;
-            int fullSet = 0;
-
-            for(int i = 0; i < side; i++)
-            {
-                for( int j = 0; j < side; j++)
-                {
-                    if (matrix[i, j] == value)
-                        fullSet++;
-                    else fullSet--;
-                    value++;
-                }
-            }
-
-            if (fullSet == Math.Pow(side, 2) - 2)
-                Console.WriteLine("You WIN!");
-        }
-
-
         public static Game FromCSV(string file)
         {
             string[] csv = File.ReadAllLines(file);
@@ -173,6 +156,8 @@ namespace BarleyBreak
             }
             return new Game(list.ToArray<int>());
         }
+
+
 
     }
 }
