@@ -19,29 +19,27 @@ namespace BarleyBreak
         public void ShakeValues()
         {
             Random rand = new Random();
-            int pos;
-            List<int> vals = new List<int>();
+            int count;
+            int valX, valY;
+            int tempInd;
+            int[] a = {-1, 1};
+            
+            count = rand.Next(500, 1000);
 
-            for(int i = 0; i < Side; i++)
+            for (int i = 0; i < count; i++)
             {
-                for(int j = 0; j < Side; j++)
+                tempInd = rand.Next(-1, 2);
+                valY = zeroY + tempInd;
+
+                if (tempInd == 0) valX = zeroX + a[rand.Next(2)];
+                else valX = zeroX;
+
+                if (valX < Side && valY < Side && valX >= 0 && valY >= 0)
                 {
-                    vals.Add(matrix[i, j]);
+                    Shift(this[valX, valY]);
                 }
             }
-
-            for (int i = 0; i < Side; i++)
-            {
-                for (int j = 0; j < Side; j++)
-                {
-                    pos = rand.Next(0, vals.Count);
-                    matrix[i, j] = vals[pos];
-                    vals.RemoveAt(pos);
-                }
-            }
-
         }
-
 
         public void FullSetTest()
         {
