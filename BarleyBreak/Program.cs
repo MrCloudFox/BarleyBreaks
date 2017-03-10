@@ -45,7 +45,7 @@ namespace BarleyBreak
                         for(int i = 0; i < bb.GetHistory.Count; i++)
                         {
                             Console.WriteLine("Value " + bb.GetHistory[i].value + 
-                                " we moved on " + bb.GetHistory[i].valueX + " " + bm,b.GetHistory[i].valueY);
+                                " we moved on " + bb.GetHistory[i].valueX + " " + bb.GetHistory[i].valueY);
                         }
                         Console.WriteLine("Enter any key to continue.");
                         Console.ReadKey();
