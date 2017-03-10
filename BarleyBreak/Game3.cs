@@ -9,7 +9,7 @@ namespace BarleyBreak
 {
     class Game3: Game2
     {
-        private List<Tuple<int, int, int>> history = new List<Tuple<int, int, int>>();
+        private List<History> history = new List<History>();
         private bool RollBackFlag = false;
 
 
@@ -19,7 +19,7 @@ namespace BarleyBreak
         }
 
 
-        new public void Shift(int value)
+        public virtual void Shift(int value)
         {
             valX = GetLocation(value).Item1;
             valY = GetLocation(value).Item2;
@@ -28,8 +28,9 @@ namespace BarleyBreak
                 Math.Abs(valY - zeroY) == 1 && zeroX - valX == 0)
             {
                 swap(value, 0);
+
                 if(!RollBackFlag)
-                    history.Add(Tuple.Create<int, int, int>(value, GetLocation(value).Item1, GetLocation(value).Item2));
+                    history.Add(new History(value,GetLocation(value).Item1, GetLocation(value).Item2));
             }
             else
             {
@@ -48,7 +49,7 @@ namespace BarleyBreak
 
             for (int i = value; i > 0; i--)
             {
-                Shift(history[counter].Item1);
+                Shift(history[counter].value);
                 history.RemoveAt(counter);
                 counter--;
             }
@@ -56,15 +57,13 @@ namespace BarleyBreak
         }
 
 
-        public void GetHistory()
+        public List<History> GetHistory
         {
-            for(int i = 0; i < history.Count; i++)
+            get
             {
-                Console.WriteLine("Value is " + history[i].Item1 + " moved on" + history[i].Item2 + " " +
-                    history[i].Item3);
+                return history;
             }
         }
-
 
         new public static Game3 FromCSV(string file)
         {

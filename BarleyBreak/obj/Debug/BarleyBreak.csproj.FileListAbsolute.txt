@@ -28,3 +28,9 @@ C:\Users\AlCloudFox\Desktop\BarleyBreaks — копия\BarleyBreak\obj\Debug\Ba
 C:\Users\AlCloudFox\Desktop\BarleyBreaks — копия\BarleyBreak\bin\Debug\BarleyBreak.exe
 C:\Users\AlCloudFox\Desktop\BarleyBreaks — копия\BarleyBreak\bin\Debug\BarleyBreak.pdb
 C:\Users\AlCloudFox\Desktop\BarleyBreaks — копия\BarleyBreak\obj\Debug\BarleyBreak.csprojResolveAssemblyReference.cache
+C:\Users\AlCloudFox\Desktop\BarleyBreaks2\BarleyBreak\bin\Debug\BarleyBreak.exe.config
+C:\Users\AlCloudFox\Desktop\BarleyBreaks2\BarleyBreak\obj\Debug\BarleyBreak.exe
+C:\Users\AlCloudFox\Desktop\BarleyBreaks2\BarleyBreak\obj\Debug\BarleyBreak.pdb
+C:\Users\AlCloudFox\Desktop\BarleyBreaks2\BarleyBreak\bin\Debug\BarleyBreak.exe
+C:\Users\AlCloudFox\Desktop\BarleyBreaks2\BarleyBreak\bin\Debug\BarleyBreak.pdb
+C:\Users\AlCloudFox\Desktop\BarleyBreaks2\BarleyBreak\obj\Debug\BarleyBreak.csprojResolveAssemblyReference.cache

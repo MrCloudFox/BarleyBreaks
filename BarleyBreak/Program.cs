@@ -27,7 +27,7 @@ namespace BarleyBreak
                 Console.WriteLine("Enter -3 to FlashBack.\n");
                 Console.WriteLine("Enter 0 to leave.\n");
                 OutPutMatrix(bb);
-                bb.FullSetTest();
+                if (bb.FullSetTest()) Console.WriteLine("You WIN!!!");
 
                 enter = int.Parse(Console.ReadLine());
                 switch (enter)
@@ -42,7 +42,11 @@ namespace BarleyBreak
                         break;
 
                     case -2:
-                        bb.GetHistory();
+                        for(int i = 0; i < bb.GetHistory.Count; i++)
+                        {
+                            Console.WriteLine("Value " + bb.GetHistory[i].value + 
+                                " we moved on " + bb.GetHistory[i].valueX + " " + bm,b.GetHistory[i].valueY);
+                        }
                         Console.WriteLine("Enter any key to continue.");
                         Console.ReadKey();
                         break;

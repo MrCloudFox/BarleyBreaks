@@ -126,7 +126,7 @@ namespace BarleyBreak
         }
 
 
-        public void Shift(int value)
+        public virtual void Shift(int value)
         {
             valX = GetLocation(value).Item1;
             valY = GetLocation(value).Item2;

@@ -19,46 +19,61 @@ namespace BarleyBreak
         public void ShakeValues()
         {
             Random rand = new Random();
-            int count;
+            int count = rand.Next(Convert.ToInt32(Side) * 10, Convert.ToInt32(Side) * 20); ;
             int valX, valY;
             int tempInd;
             int[] a = {-1, 1};
-            
-            count = rand.Next(500, 1000);
+            int[] coordRandom = new int[2];
+            int coord1, coord2;
 
             for (int i = 0; i < count; i++)
             {
+
                 tempInd = rand.Next(-1, 2);
                 valY = zeroY + tempInd;
 
                 if (tempInd == 0) valX = zeroX + a[rand.Next(2)];
                 else valX = zeroX;
 
+                coordRandom[0] = valX;
+                coordRandom[1] = valY;
+                coord1 = coordRandom[rand.Next(1)];
+                if (coord1 == valX) coord2 = valY;
+                else coord2 = valX;
+
                 if (valX < Side && valY < Side && valX >= 0 && valY >= 0)
                 {
-                    Shift(this[valX, valY]);
+                    Shift(this[coord1, coord2]);
                 }
             }
         }
 
-        public void FullSetTest()
+
+        public bool FullSetTest()
         {
             int value = 1;
-            int fullSet = 0;
+            bool flag = true;
+            if(matrix[Convert.ToInt32(Side) - 1, Convert.ToInt32(Side) - 1] != 0)
+                return false;
 
             for (int i = 0; i < Side; i++)
             {
                 for (int j = 0; j < Side; j++)
                 {
-                    if (matrix[i, j] == value)
-                        fullSet++;
-                    else fullSet--;
-                    value++;
+                    if (matrix[i, j] != value)
+                    {
+                        flag = false;
+                        break;
+                    }
+                        value++;
                 }
+                if (!flag) break;
             }
 
-            if (fullSet == Math.Pow(Side, 2) - 2)
-                Console.WriteLine("You WIN!");
+            if (value == Side * Side)
+                return true;
+
+            return flag;
         }
 
 
